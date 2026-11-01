@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<!--
+  arm6dof v2 - 6-DOF pick-and-place arm (SR1501MG servo kit, 2 mm aluminium brackets)
+  Zero pose: arm pointing straight up. Units: metres, kg, rad.
+
+  VERIFIED (from the robu.in listing you sent):
+    * 6 x SR1501MG, torque 15.5 kg.cm (=1.52 N.m), travel ~165 deg (800-2200 us)
+    * 2 mm aluminium brackets, 6 servos -> 6 DOF (base, shoulder, elbow, wrist pitch, wrist roll, gripper)
+  ESTIMATED from the product photo (MUST be checked with a ruler once built):
+    * every link length / axis offset marked [EST]
+    * link masses, velocity limit (2 rad/s), damping
+-->
+<robot name="arm6dof">
+  <material name="black"><color rgba="0.08 0.08 0.09 1"/></material>
+  <material name="servo"><color rgba="0.15 0.15 0.18 1"/></material>
+  <material name="silver"><color rgba="0.75 0.75 0.78 1"/></material>
+  <material name="red"><color rgba="0.8 0.1 0.1 1"/></material>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0223"/>
+      <mass value="0.3"/>
+      <inertia ixx="2.996e-04" ixy="0" ixz="0" iyy="2.996e-04" iyz="0" izz="5.000e-04"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.002" rpy="0 0 0"/>
+      <geometry><box size="0.1 0.1 0.004"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.002" rpy="0 0 0"/>
+      <geometry><box size="0.1 0.1 0.004"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.0243" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0405 0.0405"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0243" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0405 0.0405"/></geometry>
+    </collision>
+  </link>
+  <!-- J1 base yaw: Z axis. [EST] yaw axis 45 mm above table -->
+  <joint name="j1_base" type="revolute">
+    <parent link="base_link"/><child link="turret"/>
+    <origin xyz="0 0 0.045" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.44" upper="1.44" effort="1.5" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="turret">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0301"/>
+      <mass value="0.12"/>
+      <inertia ixx="7.230e-05" ixy="0" ixz="0" iyy="6.130e-05" iyz="0" izz="6.100e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.0015" rpy="0 0 0"/>
+      <geometry><box size="0.05 0.06 0.003"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0015" rpy="0 0 0"/>
+      <geometry><box size="0.05 0.06 0.003"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0225 0 0.02" rpy="0 0 0"/>
+      <geometry><box size="0.003 0.06 0.04"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0225 0 0.02" rpy="0 0 0"/>
+      <geometry><box size="0.003 0.06 0.04"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0225 0 0.02" rpy="0 0 0"/>
+      <geometry><box size="0.003 0.06 0.04"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0225 0 0.02" rpy="0 0 0"/>
+      <geometry><box size="0.003 0.06 0.04"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.04" rpy="1.5707963267948966 0 0"/>
+      <geometry><cylinder radius="0.01" length="0.0405"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.04" rpy="1.5707963267948966 0 0"/>
+      <geometry><cylinder radius="0.01" length="0.0405"/></geometry>
+    </collision>
+  </link>
+  <!-- J2 shoulder pitch: Y axis. [EST] 40 mm above J1 -->
+  <joint name="j2_shoulder" type="revolute">
+    <parent link="turret"/><child link="upper_arm"/>
+    <origin xyz="0 0 0.04" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.44" upper="1.44" effort="1.5" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="upper_arm">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0626"/>
+      <mass value="0.18"/>
+      <inertia ixx="2.807e-04" ixy="0" ixz="0" iyy="2.599e-04" iyz="0" izz="6.998e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.0525" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.055 0.105"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0525" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.055 0.105"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.105" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0205 0.0405"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.105" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0205 0.0405"/></geometry>
+    </collision>
+  </link>
+  <!-- J3 elbow pitch: Y axis. [EST] L1 = 0.105 m -->
+  <joint name="j3_elbow" type="revolute">
+    <parent link="upper_arm"/><child link="forearm"/>
+    <origin xyz="0 0 0.105" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.44" upper="1.44" effort="1.5" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="forearm">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0601"/>
+      <mass value="0.15"/>
+      <inertia ixx="2.120e-04" ixy="0" ixz="0" iyy="2.013e-04" iyz="0" izz="5.175e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.05 0.1"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.05 0.1"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0205 0.0405"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <geometry><box size="0.0405 0.0205 0.0405"/></geometry>
+    </collision>
+  </link>
+  <!-- J4 wrist pitch: Y axis. [EST] L2 = 0.100 m -->
+  <joint name="j4_wrist_pitch" type="revolute">
+    <parent link="forearm"/><child link="wrist"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.44" upper="1.44" effort="1.5" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="wrist">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0250"/>
+      <mass value="0.08"/>
+      <inertia ixx="2.267e-05" ixy="0" ixz="0" iyy="2.733e-05" iyz="0" izz="1.667e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.0225" rpy="0 0 0"/>
+      <geometry><box size="0.04 0.03 0.045"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0225" rpy="0 0 0"/>
+      <geometry><box size="0.04 0.03 0.045"/></geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.006" length="0.02"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.006" length="0.02"/></geometry>
+    </collision>
+  </link>
+  <!-- J5 wrist roll: Z axis (along forearm). [EST] 45 mm from J4 -->
+  <joint name="j5_wrist_roll" type="revolute">
+    <parent link="wrist"/><child link="gripper"/>
+    <origin xyz="0 0 0.045" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.44" upper="1.44" effort="1.5" velocity="2.0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="gripper">
+    <inertial>
+      <origin xyz="0.0000 0.0000 0.0225"/>
+      <mass value="0.12"/>
+      <inertia ixx="3.625e-05" ixy="0" ixz="0" iyy="4.525e-05" iyz="0" izz="4.100e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.0225" rpy="0 0 0"/>
+      <geometry><box size="0.05 0.04 0.045"/></geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0225" rpy="0 0 0"/>
+      <geometry><box size="0.05 0.04 0.045"/></geometry>
+    </collision>
+  </link>
+  <!-- J6 gripper: ONE control (j6_gripper), 0 = closed, 0.02 = open (~50 mm gap). [EST]
+       The right finger is a passive follower of j6_gripper via <mimic>, so it moves symmetrically.
+       Never command j6_gripper_follower directly. -->
+  <joint name="j6_gripper" type="prismatic">
+    <parent link="gripper"/><child link="finger_left"/>
+    <origin xyz="0 0.005 0.045" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="0.02" effort="10" velocity="0.1"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="finger_left">
+    <inertial>
+      <origin xyz="0.0000 0.0040 0.0300"/>
+      <mass value="0.02"/>
+      <inertia ixx="6.107e-06" ixy="0" ixz="0" iyy="6.240e-06" iyz="0" izz="3.467e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.004 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.008 0.06"/></geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.004 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.008 0.06"/></geometry>
+    </collision>
+  </link>
+  <joint name="j6_gripper_follower" type="prismatic">
+    <parent link="gripper"/><child link="finger_right"/>
+    <origin xyz="0 -0.005 0.045" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit lower="0" upper="0.02" effort="10" velocity="0.1"/>
+    <mimic joint="j6_gripper" multiplier="1" offset="0"/>
+    <dynamics damping="0.05" friction="0.02"/>
+  </joint>
+  <link name="finger_right">
+    <inertial>
+      <origin xyz="0.0000 -0.0040 0.0300"/>
+      <mass value="0.02"/>
+      <inertia ixx="6.107e-06" ixy="0" ixz="0" iyy="6.240e-06" iyz="0" izz="3.467e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.004 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.008 0.06"/></geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.004 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.008 0.06"/></geometry>
+    </collision>
+  </link>
+  <!-- Tool centre point (grasp point) for IK: between fingertips -->
+  <link name="tool_center"/>
+  <joint name="tcp_fixed" type="fixed">
+    <parent link="gripper"/><child link="tool_center"/>
+    <origin xyz="0 0 0.095" rpy="0 0 0"/>
+  </joint>
+</robot>

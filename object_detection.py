@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from coordinates import pixel_to_table
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 colors = {
     "green": (
