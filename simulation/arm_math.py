@@ -1,7 +1,8 @@
 import math
 import numpy as np
 
-URDF_PATH = r"C:\armproject\arm6dof_v2.urdf"
+URDF_PATH = r"D:/College/Projects or Scripts/Robotic Pick and Place/arm6dof_v2.urdf"
+# URDF_PATH = r"C:\armproject\arm6dof_v2.urdf"
 
 H_SHOULDER = 0.085
 L1 = 0.105
