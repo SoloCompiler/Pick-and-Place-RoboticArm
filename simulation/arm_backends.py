@@ -29,7 +29,7 @@ class SimArm(ArmInterface):
         p.setTimeStep(SIM_DT)
         p.loadURDF("plane.urdf")
         p.resetDebugVisualizerCamera(0.75, 55, -40, [0.12, 0, 0.0])
-        self.body = p.loadURDF(URDF_PATH, useFixedBase=True)
+        self.body = p.loadURDF(r"C:\armproject\simulation\arm6dof_v2.urdf", useFixedBase=True)
  
         self.idx = {p.getJointInfo(self.body, i)[1].decode(): i for i in range(p.getNumJoints(self.body))}
         names = ("j1_base", "j2_shoulder", "j3_elbow", "j4_wrist_pitch", "j5_wrist_roll")
